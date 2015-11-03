@@ -1,0 +1,13 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+      headerCacheSize: 512 bytes
+      outputBufferSize: 32KiB
+      maxRequestHeaderSize: 8KiB
+      maxResponseHeaderSize: 8KiB
+      inputBufferSize: 8KiB
+      idleTimeout: 30 seconds
+      minBufferPoolSize: 64 bytes
+      bufferPoolIncrement: 1KiB
+      maxBufferPoolSize: 64KiB

@@ -1,0 +1,102 @@
+import java.util.concurrent.*
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+plugins {
+    id 'application'
+    id 'project-report'
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '1.2.2'
+    id 'jacoco'
+    id 'findbugs'
+    id 'idea'
+}
+
+group 'met-weather-apps-mobile-adapter'
+version '1.0-SNAPSHOT'
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testRuntime
+    }
+    compile.exclude group:'javax.ws.rs', module:'jsr311-api'
+}
+
+jacoco {
+    toolVersion = "0.7.4.201502262128"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/jacocoHtml"
+    }
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: "${buildDir}/classes/main/",
+                    exclude: ['**/Location**']
+            )
+        })
+    }
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.7'
+}
+
+ext {
+    es = Executors.newSingleThreadExecutor()
+}
+
+
+task cucumber() {
+    dependsOn assemble, compileJava, compileTestJava
+
+    doLast {
+        javaexec {
+            main = "cucumber.api.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', '', 'src/test/resources/features']
+        }
+    }
+}
+
+mainClassName = 'App'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'io.dropwizard:dropwizard-core:0.9.0-rc4',
+            'io.federecio:dropwizard-swagger:0.7.0'
+    testCompile group: 'junit', name: 'junit', version: '4.11',
+            'info.cukes:cucumber-java:1.2.4',
+            'info.cukes:cucumber-junit:1.2.4',
+            'io.dropwizard:dropwizard-testing:0.9.0-rc4',
+            'org.mockito:mockito-all:1.10.19',
+            'org.powermock:powermock-mockito-release-full:1.6.2'
+}
+
+run {
+    args 'server', 'config.yml'
+}
+
+
+task stage(dependsOn: ['clean', 'shadowJar'])
