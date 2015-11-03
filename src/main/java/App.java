@@ -8,7 +8,7 @@ import io.dropwizard.setup.Environment;
 /**
  * Created by andrei on 03/11/15.
  */
-public class App extends Application<Configuration> {
+public class App extends Application<PhonebookConfiguration> {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main( String[] args ) throws Exception{
@@ -16,11 +16,13 @@ public class App extends Application<Configuration> {
     }
 
     @Override
-    public void initialize(Bootstrap<Configuration> b) {}
+    public void initialize(Bootstrap<PhonebookConfiguration> b) {}
 
     @Override
-    public void run(Configuration configuration, Environment environment) throws Exception {
+    public void run(PhonebookConfiguration configuration, Environment environment) throws Exception {
         logger.info("Method App#run() called");
-        System.out.println( "Hello world, by Dropwizard!" );
+        for (int i=0; i< configuration.getMessageRepetitions(); i++) {
+            System.out.println(configuration.getMessage());
+        }
     }
 }
