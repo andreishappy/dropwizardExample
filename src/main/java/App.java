@@ -21,8 +21,6 @@ public class App extends Application<PhonebookConfiguration> {
     @Override
     public void run(PhonebookConfiguration configuration, Environment environment) throws Exception {
         logger.info("Method App#run() called");
-        for (int i=0; i< configuration.getMessageRepetitions(); i++) {
-            System.out.println(configuration.getMessage());
-        }
+        environment.jersey().register(new ContactResource());
     }
 }
