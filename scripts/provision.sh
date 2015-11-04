@@ -12,9 +12,9 @@ sudo yum -y install vim-X11 vim-common vim-enhanced vim-minimal
 sudo yum -y install git
 sudo yum -y install wget
 sudo yum -y install zip unzip
+sudo yum -y install mariadb-server mariadb
 
-
-# Install java
+# Install java and mysql
 # http://www.webupd8.org/2012/09/install-oracle-java-8-in-ubuntu-via-ppa.html
 # Note: you need to install python-software-properties to install the add-apt-repository plugin
 
@@ -28,13 +28,4 @@ if ! executable_already_exists java ; then
   sudo alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_25/bin/javac 1
   sudo alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_25/bin/jar 1
   sudo rm /opt/jdk-8u25-linux-x64.tar.gz
-fi
-
-# Install node for the mock server
-# https://github.com/nodejs/node-v0.x-archive/wiki/Installing-Node.js-via-package-manager
-
-if ! executable_already_exists node ; then
-  curl --silent --location https://rpm.nodesource.com/setup | bash -
-  yum -y install nodejs
-  yum -y install gcc-c++ make
 fi

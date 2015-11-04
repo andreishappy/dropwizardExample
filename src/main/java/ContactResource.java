@@ -1,6 +1,10 @@
+import org.eclipse.jetty.server.Authentication;
+import org.skife.jdbi.v2.DBI;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URISyntaxException;
 
 /**
  * Created by andrei on 03/11/15.
@@ -9,23 +13,35 @@ import javax.ws.rs.core.Response;
 @Path("/contact")
 @Produces(MediaType.APPLICATION_JSON)
 public class ContactResource {
+    private final ContactDAO contactDAO;
+
+    public ContactResource(DBI jdbi) {
+        contactDAO = jdbi.onDemand(ContactDAO.class);
+    }
+
 
     @GET
     @Path("/{id}")
     public Response getContact(@PathParam("id") int id) {
-        String payload = "{ contact_id: " + id + ", name: \"Dummy Name\", phone: \"70968584783\" }";
-        return Response
-                .ok(payload)
-                .build();
+        System.out.println("Called getContact");
+        System.out.println(contactDAO);
+        System.out.println(id);
+        Contact contact = contactDAO.getContactById(id);
+        System.out.println("Contact gotten");
+        if (contact != null) {
+            return Response
+                    .ok(contact)
+                    .build();
+        } else {
+            return Response
+                    .noContent()
+                    .build();
+        }
     }
 
     @POST
-    public Response createContact(
-            @FormParam("name") String name,
-            @FormParam("phone") String phone) {
-        return Response
-                .created(null)
-                .build();
+    public Response createContact(Contact contact) throws URISyntaxException {
+        return Response.ok().build();
     }
 
     @DELETE
@@ -39,12 +55,9 @@ public class ContactResource {
 
     @PUT
     @Path("/{id}")
-    public Response updateContact(
-            @PathParam("id") String id,
-            @FormParam("name") String name,
-            @FormParam("phone") String phone) {
+    public Response updateContact(@PathParam("id") int id, Contact contact) {
         return Response
-                .ok("{contact_id: "+ id +", name: \""+ name +"\",phone: \""+ phone +"\" }")
+                .ok(new Contact(id, contact.getFirstName(), contact.getLastName(), contact.getPhone()))
                 .build();
     }
 }

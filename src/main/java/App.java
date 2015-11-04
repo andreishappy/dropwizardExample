@@ -1,4 +1,6 @@
+import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
+import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.dropwizard.Application;
@@ -20,7 +22,12 @@ public class App extends Application<PhonebookConfiguration> {
 
     @Override
     public void run(PhonebookConfiguration configuration, Environment environment) throws Exception {
-        logger.info("Method App#run() called");
-        environment.jersey().register(new ContactResource());
+
+        // Create a DBI factory and build a JDBI instance
+        final DBIFactory factory = new DBIFactory();
+        final DBI jdbi = factory
+                .build(environment, configuration.getDataSourceFactory(), "mysql");
+        // Add the resource to the environment
+        environment.jersey().register(new ContactResource(jdbi));
     }
 }
