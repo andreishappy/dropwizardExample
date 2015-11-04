@@ -5,6 +5,8 @@ import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 
+import javax.validation.Validator;
+
 /**
  * Created by andrei on 03/11/15.
  */
@@ -21,6 +23,6 @@ public class App extends Application<PhonebookConfiguration> {
     @Override
     public void run(PhonebookConfiguration configuration, Environment environment) throws Exception {
         logger.info("Method App#run() called");
-        environment.jersey().register(new ContactResource());
+        environment.jersey().register(new ContactResource(environment.getValidator()));
     }
 }

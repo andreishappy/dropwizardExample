@@ -1,6 +1,14 @@
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by andrei on 03/11/15.
@@ -9,20 +17,34 @@ import javax.ws.rs.core.Response;
 @Path("/contact")
 @Produces(MediaType.APPLICATION_JSON)
 public class ContactResource {
+    private final Validator validator;
+
+    public ContactResource(Validator validator) {
+        this.validator = validator;
+    }
 
     @GET
     @Path("/{id}")
     public Response getContact(@PathParam("id") int id) {
-        String payload = "{ contact_id: " + id + ", name: \"Dummy Name\", phone: \"70968584783\" }";
         return Response
-                .ok(payload)
+                .ok(new Contact(1, "Andy", "Peters", "00123012"))
                 .build();
     }
 
     @POST
-    public Response createContact(
-            @FormParam("name") String name,
-            @FormParam("phone") String phone) {
+    public Response createContact(Contact contact) {
+        Set<ConstraintViolation<Contact>> violations = validator.validate(contact);
+        if (violations.size() > 0) {
+            ArrayList<String> validationMessages = new ArrayList<>();
+            for (ConstraintViolation<Contact> violation : violations) {
+                validationMessages.add(violation.getPropertyPath().toString() + ": " + violation.getMessage());
+            }
+
+            return Response
+                    .status(Status.BAD_REQUEST)
+                    .entity(validationMessages)
+                    .build();
+        }
         return Response
                 .created(null)
                 .build();
@@ -40,11 +62,12 @@ public class ContactResource {
     @PUT
     @Path("/{id}")
     public Response updateContact(
-            @PathParam("id") String id,
-            @FormParam("name") String name,
+            @PathParam("id") int id,
+            @FormParam("firstName") String firstName,
+            @FormParam("lastName") String lastName,
             @FormParam("phone") String phone) {
         return Response
-                .ok("{contact_id: "+ id +", name: \""+ name +"\",phone: \""+ phone +"\" }")
+                .ok(new Contact(id, firstName, lastName, phone))
                 .build();
     }
 }
