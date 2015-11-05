@@ -1,11 +1,10 @@
 import io.dropwizard.setup.Bootstrap;
+import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
-
-import javax.validation.Validator;
+import javax.ws.rs.client.Client;
 
 /**
  * Created by andrei on 03/11/15.
@@ -23,6 +22,9 @@ public class App extends Application<PhonebookConfiguration> {
     @Override
     public void run(PhonebookConfiguration configuration, Environment environment) throws Exception {
         logger.info("Method App#run() called");
+        final Client client = new JerseyClientBuilder().build();
+
+        environment.jersey().register(new ClientResource(client));
         environment.jersey().register(new ContactResource(environment.getValidator()));
     }
 }

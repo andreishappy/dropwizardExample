@@ -1,13 +1,10 @@
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -60,6 +57,7 @@ public class ContactResource {
     }
 
     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response updateContact(
             @PathParam("id") int id,
