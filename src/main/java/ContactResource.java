@@ -1,3 +1,6 @@
+import io.dropwizard.auth.Auth;
+import io.dropwizard.auth.PrincipalImpl;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.ws.rs.*;
@@ -22,14 +25,17 @@ public class ContactResource {
 
     @GET
     @Path("/{id}")
-    public Response getContact(@PathParam("id") int id) {
+    public Response getContact(
+            @PathParam("id") int id, @Auth PrincipalImpl principal) {
+
         return Response
                 .ok(new Contact(1, "Andy", "Peters", "00123012"))
                 .build();
     }
 
     @POST
-    public Response createContact(Contact contact) {
+    public Response createContact(
+            Contact contact) {
         Set<ConstraintViolation<Contact>> violations = validator.validate(contact);
         if (violations.size() > 0) {
             ArrayList<String> validationMessages = new ArrayList<>();
