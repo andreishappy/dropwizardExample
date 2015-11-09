@@ -4,7 +4,7 @@ messageRepetitions: 3
 server:
   applicationConnectors:
     - type: http
-      port: 8089
+      port: 8080
       headerCacheSize: 512 bytes
       outputBufferSize: 32KiB
       maxRequestHeaderSize: 8KiB
