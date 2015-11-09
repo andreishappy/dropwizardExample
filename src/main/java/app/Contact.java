@@ -1,3 +1,5 @@
+package app;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.dropwizard.validation.ValidationMethod;
 import org.hibernate.validator.constraints.Length;

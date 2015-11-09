@@ -1,5 +1,4 @@
-import io.dropwizard.auth.Auth;
-import io.dropwizard.auth.PrincipalImpl;
+package app;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -26,7 +25,7 @@ public class ContactResource {
     @GET
     @Path("/{id}")
     public Response getContact(
-            @PathParam("id") int id, @Auth PrincipalImpl principal) {
+            @PathParam("id") int id) {
 
         return Response
                 .ok(new Contact(1, "Andy", "Peters", "00123012"))

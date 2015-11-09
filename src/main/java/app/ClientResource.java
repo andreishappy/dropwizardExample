@@ -1,4 +1,4 @@
-import org.glassfish.jersey.client.ClientResponse;
+package app;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

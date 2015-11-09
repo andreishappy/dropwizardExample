@@ -1,0 +1,43 @@
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: ERROR
+
+  appenders:
+    - type: console
+      threshold: ERROR
+
+    - type: file
+      threshold: INFO
+      currentLogFilename: ./logs/pws_mobile.log
+      archivedLogFilenamePattern: ./logs/pws_mobile-%d.log.gz
+      archivedFileCount: 5
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+      headerCacheSize: 512 bytes
+      outputBufferSize: 32KiB
+      maxRequestHeaderSize: 8KiB
+      maxResponseHeaderSize: 8KiB
+      inputBufferSize: 8KiB
+      idleTimeout: 30 seconds
+      minBufferPoolSize: 64 bytes
+      bufferPoolIncrement: 1KiB
+      maxBufferPoolSize: 64KiB
+
+metOfficeForecastURL: http://localhost:3000/public/data/PWSCache/BestForecast/Forecast/
+metOfficeUkForecastSitesURL: http://localhost:3000/public/data/PWSCache/PwsLocations/ForecastsList?format=application/json
+metOfficeInternationalForecastSitesURL: http://localhost:3000/public/data/PWSCache/PwsIntLocations/ForecastsList?format=application/json
+metOfficeInternationalForecastSiteDetailsURL: http://localhost:3000/public/data/PWSCache/PwsIntLocations/Details/
+metOfficeUKForecastSiteDetailsURL: http://localhost:3000/public/data/PWSCache/PwsLocations/Details/
+warningAllURL: http://localhost:3000/warning/all
+
+
+swagger:
+  resourcePackage: uk.gov.metoffice.weathercloud.forecastsite.locator.controller,uk.gov.metoffice.weathercloud.forecast.detailed.controller,uk.gov.metoffice.weathercloud.forecast.snapshot.controller
+
+features:
+  weatherSummary: true

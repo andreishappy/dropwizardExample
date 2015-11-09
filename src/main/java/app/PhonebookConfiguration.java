@@ -1,3 +1,5 @@
+package app;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.Max;
 import io.dropwizard.Configuration;

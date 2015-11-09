@@ -13,7 +13,6 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.2'
     id 'jacoco'
     id 'findbugs'
-    id 'idea'
 }
 
 group 'met-weather-apps-mobile-adapter'
@@ -69,12 +68,12 @@ task cucumber() {
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', '', 'src/test/resources/features']
+            args = ['--plugin', 'pretty', '--glue', '', 'src/test']
         }
     }
 }
 
-mainClassName = 'App'
+mainClassName = 'app.App'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

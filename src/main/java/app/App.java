@@ -1,3 +1,5 @@
+package app;
+
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.PrincipalImpl;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
